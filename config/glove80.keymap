@@ -16,19 +16,85 @@
 // layers
 #define DEFAULT 0
 #define LOWER 1
-#define MAGIC 2
-#define FACTORY_TEST 3
+#define UPPER 2
+#define MAGIC 3
+#define FACTORY_TEST 4
+
+&sk {
+    release-after-ms = <2000>;
+    quick-release;
+};
+
+&sl {
+    release-after-ms = <2000>;
+    quick-release;
+};
 
 / {
     behaviors {
-        // For the "layer" key, it'd nice to be able to use it as either a shift or a toggle.
-        // Configure it as a tap dance, so the first tap (or hold) is a &mo and the second tap is a &to
-        layer_td: tap_dance_0 {
-            compatible = "zmk,behavior-tap-dance";
-            label = "LAYER_TAP_DANCE";
+        hm: homerow_mods {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            tapping-term-ms = <500>;
+            quick-tap-ms = <200>;
+            require-prior-idle-ms = <125>;
+            retro-tap;
+            flavor = "tap-preferred";
+            bindings = <&kp>, <&kp>;
+        };
+    };
+};
+
+
+// HOME ROW MODS
+// CMD 
+#define L_GUI_HM hm LGUI A
+#define R_GUI_HM hm RGUI TAB
+// ALT
+#define L_ALT_HM hm LALT S
+#define R_ALT_HM hm RALT L
+// CTRL
+#define L_CTRL_HM hm LCTRL D
+#define R_CTRL_HM hm RCTRL K 
+// SHIFT
+#define L_SHFT_HM hm LSHFT F
+#define R_SHFT_HM hm RSHFT J 
+
+
+/ {
+    behaviors {
+        
+        // HOME ROW MOD NAVIGATION
+        MOD_L_NAV: mod_left_navigation {
             #binding-cells = <0>;
-            tapping-term-ms = <200>;
-            bindings = <&mo LOWER>, <&to LOWER>;
+            compatible = "zmk,behavior-mod-morph";
+            bindings = <&kp H>, <&kp LEFT>;
+            mods = <(MOD_LGUI|MOD_LALT|MOD_LCTL)>;
+            keep-mods = <(MOD_LGUI|MOD_LALT|MOD_LCTL)>;
+        };
+
+        MOD_D_NAV: mod_down_navigation {
+            #binding-cells = <0>;
+            compatible = "zmk,behavior-mod-morph";
+            bindings = <&R_SHFT_HM>, <&kp DOWN>;
+            mods = <(MOD_LGUI|MOD_LALT|MOD_LCTL)>;
+            keep-mods = <(MOD_LGUI|MOD_LALT|MOD_LCTL)>;
+        };
+
+        MOD_U_NAV: mod_upper_navigation {
+            #binding-cells = <0>;
+            compatible = "zmk,behavior-mod-morph";
+            bindings = <&R_CTRL_HM>, <&kp UP>;
+            mods = <(MOD_LGUI|MOD_LALT|MOD_LCTL)>;
+            keep-mods = <(MOD_LGUI|MOD_LALT|MOD_LCTL)>;
+        };
+
+        MOD_R_NAV: mod_right_navigation {
+            #binding-cells = <0>;
+            compatible = "zmk,behavior-mod-morph";
+            bindings = <&R_ALT_HM>, <&kp RIGHT>;
+            mods = <(MOD_LGUI|MOD_LALT|MOD_LCTL)>;
+            keep-mods = <(MOD_LGUI|MOD_LALT|MOD_LCTL)>;
         };
 
         magic: magic_hold_tap {
@@ -87,36 +153,73 @@
         };
     };
 
+    behaviors {
+        shift_td: shift_td {
+            #binding-cells = <0>;
+            compatible = "zmk,behavior-tap-dance";
+            bindings = <&sk LSHIFT>, <&caps_word>;
+        };
+
+        L_LAYER_TD: L_LAYER_TD {
+            #binding-cells = <0>;
+            compatible = "zmk,behavior-tap-dance"; 
+            bindings = <&sl LOWER>, <&tog LOWER>; 
+        };
+
+        U_LAYER_TD: U_LAYER_TD {
+            #binding-cells = <0>;
+            compatible = "zmk,behavior-tap-dance"; 
+            bindings = <&sl UPPER>, <&tog UPPER>; 
+        };
+
+        DEF_LAYER_TD: DEF_LAYER_TD { 
+            #binding-cells = <0>;
+            compatible = "zmk,behavior-tap-dance"; 
+            bindings = <&to DEFAULT>, <&to DEFAULT>; 
+        };
+    };
+
     keymap {
         compatible = "zmk,keymap";
 
         default_layer {
             // ---------------------------------------------------------------------------------------------------------------------------------
-            // |  F1   |  F2 |  F3 |  F4  |  F5  |                                                               |  F6   |  F7   |  F8  |   F9  |  F10 |
-            // |  =    |  1  |  2  |  3   |  4   |  5   |                                                 |  6   |   7   |   8   |  9   |   0   |   -  |
-            // |  TAB  |  Q  |  W  |  E   |  R   |  T   |                                                 |  Y   |   U   |   I   |  O   |   P   |   \  |
-            // |  ESC  |  A  |  S  |  D   |  F   |  G   |                                                 |  H   |   J   |   K   |  L   |   ;   |   '  |
-            // |   `   |  Z  |  X  |  C   |  V   |  B   | LSHFT | LCTRL | LOWER | | LGUI  | RCTRL | RSHFT |  N   |   M   |   ,   |  .   |   /   | PGUP |
-            // | MAGIC | HOME| END | LEFT | RIGHT|      | BSPC  | DEL   | LALT  | | RALT  | RET   | SPACE |      |  UP   | DOWN  |  [   |   ]   | PGDN |
+            // |  F1       |       F2        |         F3         |         F4           |          F5             |                                                                                                                                           |           F6                |         F7               |        F8            |           F9             |         F10          |
+            // |  =        |       1         |         2          |         3            |          4              |        5              |                                                                                                 |      6          |            7                |          8               |         9            |            0             |           -          |
+            // |  TAB      |       Q         |         W          |         E            |          R              |        T              |                                                                                                 |      Y          |            U                |          I               |         O            |            P             |           \          |
+            // |  ESC      |       A         |         S          |         D            |          F              |        G              |                                                                                                 |      H          |            J                |          K               |         L            |            ;             |           '          |
+            // |   `       |       Z         |         X          |         C            |          V              |        B              |      LSHFT    |    LCTRL       |      LOWER        | |     LGUI        |    RCTRL   |  RSHFT    |      N          |            M                |          ,               |         .            |            /             |          PGUP        |
+            // | MAGIC     |      HOME       |        END         |        LEFT          |         RIGHT           |                       |      BSPC     |    DEL         |      LALT         | |     RALT        |    RET     |  SPACE    |                 |           UP                |        DOWN              |         [            |            ]             |          PGDN        |
 
             bindings = <
-            &kp F1         &kp F2   &kp F3      &kp F4      &kp F5                                                                                         &kp F6  &kp F7      &kp F8      &kp F9      &kp F10
-            &kp EQUAL      &kp N1   &kp N2      &kp N3      &kp N4      &kp N5                                                                     &kp N6  &kp N7  &kp N8      &kp N9      &kp N0      &kp MINUS
-            &kp TAB        &kp Q    &kp W       &kp E       &kp R       &kp T                                                                      &kp Y   &kp U   &kp I       &kp O       &kp P       &kp BSLH
-            &kp ESC        &kp A    &kp S       &kp D       &kp F       &kp G                                                                      &kp H   &kp J   &kp K       &kp L       &kp SEMI    &kp SQT
-            &kp GRAVE      &kp Z    &kp X       &kp C       &kp V       &kp B   &kp LSHFT   &kp LCTRL   &layer_td  &kp LGUI  &kp RCTRL &kp RSHFT   &kp N   &kp M   &kp COMMA   &kp DOT     &kp FSLH    &kp PG_UP
-            &magic MAGIC 0 &kp HOME &kp END     &kp LEFT    &kp RIGHT           &kp BSPC    &kp DEL     &kp LALT   &kp RALT  &kp RET   &kp SPACE           &kp UP  &kp DOWN    &kp LBKT    &kp RBKT    &kp PG_DN
+            &kp F1              &kp F2              &kp F3                &kp F4                  &kp F5                                                                                                                                                                 &kp F6                      &kp F7                    &kp F8                     &kp F9                   &kp F10
+            &kp EQUAL           &kp N1              &kp N2                &kp N3                  &kp N4                  &kp N5                                                                                                                 &kp N6                  &kp N7                      &kp N8                    &kp N9                     &kp N0                   &kp MINUS
+            &kp TAB             &kp Q               &kp W                 &kp E                   &kp R                   &kp T                                                                                                                  &kp Y                   &kp U                       &kp I                     &kp O                      &kp P                    &kp BSLH
+            &U_LAYER_TD         &L_GUI_HM           &L_ALT_HM             &L_CTRL_HM              &L_SHFT_HM              &kp G                                                                                                                  &MOD_L_NAV              &MOD_D_NAV                  &MOD_U_NAV                &MOD_R_NAV                 &R_GUI_HM                &kp ESC
+            &sk LALT            &kp Z               &kp X                 &kp C                   &kp V                   &kp B                  &shift_td   &kp LCTRL           &L_LAYER_TD           &kp LGUI        &kp RCTRL   &shift_td     &kp N                   &kp M                       &kp COMMA                 &kp DOT                    &kp FSLH                 &kp PG_UP
+            &magic MAGIC 0      &kp HOME            &kp END               &kp LEFT                &kp RIGHT                                      &kp BSPC    &L_LAYER_TD         &U_LAYER_TD           &L_LAYER_TD     &kp ENTER   &kp SPACE                             &kp UP                      &kp DOWN                  &kp LBKT                   &kp RBKT                 &kp PG_DN
             >;
         };
 
         lower_layer {
             bindings = <
-            &kp C_BRI_DN      &kp C_BRI_UP        &kp C_PREV      &kp C_NEXT      &kp C_PP                                                                                                           &kp C_MUTE   &kp C_VOL_DN &kp C_VOL_UP  &none           &kp PAUSE_BREAK
-            &trans            &none               &none           &none           &none           &kp HOME                                                                              &kp LPAR     &kp KP_NUM   &kp KP_EQUAL &kp KP_DIVIDE &kp KP_MULTIPLY &kp PSCRN
-            &trans            &none               &none           &kp UP          &none           &kp END                                                                               &kp RPAR     &kp KP_N7    &kp KP_N8    &kp KP_N9     &kp KP_MINUS    &kp SLCK
-            &trans            &none               &kp LEFT        &kp DOWN        &kp RIGHT       &kp PG_UP                                                                             &kp PRCNT    &kp KP_N4    &kp KP_N5    &kp KP_N6     &kp KP_PLUS     &none
-            &trans            &kp K_CMENU         &none           &kp F11         &kp F12         &kp PG_DN       &trans      &trans      &to DEFAULT &trans      &trans      &trans    &kp COMMA    &kp KP_N1    &kp KP_N2    &kp KP_N3     &kp KP_ENTER    &trans
-            &trans            &kp CAPS            &kp INS         &kp F11         &kp F12                         &trans      &trans      &trans      &trans      &trans      &trans                 &kp KP_N0    &kp KP_N0    &kp KP_DOT    &kp KP_ENTER    &trans
+            &none               &none               &none                 &none                   &none                                                                                                                                                                  &none                       &none                     &none                      &none                    &none 
+            &trans              &kp F1              &kp F2                &kp F3                  &kp F4                  &kp F5                                                                                                                 &kp F6                  &kp F7                      &kp F8                    &kp F9                     &kp F10                  &none
+            &trans              &none               &kp PLUS              &kp EQUAL               &kp MINUS               &none                                                                                                                  &none                   &kp BSLH                    &kp FSLH                  &none                      &none                    &none
+            &U_LAYER_TD         &kp LGUI            &kp LALT              &kp LCTRL               &kp SINGLE_QUOTE        &kp SEMICOLON                                                                                                          &kp TILDE               &kp COMMA                   &kp RCTRL                 &kp RALT                   &kp RGUI                 &kp ESC 
+            &trans              &none               &kp LESS_THAN         &kp GREATER_THAN        &kp LEFT_PARENTHESIS    &kp LEFT_BRACKET       &sk LSHFT   &none              &to DEFAULT            &none            &none       &sk RSHFT    &kp LEFT                &kp DOWN                    &kp UP                    &kp RIGHT                  &none                    &trans
+            &trans              &none               &none                 &none                   &none                                          &kp BSPC    &DEF_LAYER_TD      &U_LAYER_TD            &to DEFAULT      &kp ENTER   &kp SPACE                            &none                       &none                     &none                      &none                    &trans
+            >;
+        };
+
+        upper_layer {
+            bindings = <
+            &kp C_BRI_DN        &kp C_BRI_UP        &kp C_PREV            &kp C_NEXT              &kp C_PP                                                                                                                                                               &none                       &none                     &none                      &none                    &none
+            &trans              &kp DELETE          &trans                &kp UNDERSCORE          &kp PLUS                &kp PAGE_UP                                                                                                            &trans                  &trans                      &trans                    &kp BACKSLASH              &kp PIPE                 &trans
+            &trans              &kp EXCLAMATION     &kp AT_SIGN           &kp POUND               &kp DOLLAR              &kp PERCENT                                                                                                            &kp CARET               &kp AMPERSAND               &kp ASTERISK              &kp LEFT_BRACE             &kp RIGHT_BRACE          &none
+            &DEF_LAYER_TD       &kp NUMBER_1        &kp NUMBER_2          &kp NUMBER_3            &kp NUMBER_4            &kp NUMBER_5                                                                                                           &kp NUMBER_6            &kp NUMBER_7                &kp NUMBER_8              &kp NUMBER_9               &kp NUMBER_0             &kp ESC
+            &trans              &none               &kp LESS_THAN         &kp GREATER_THAN        &kp LEFT_PARENTHESIS    &kp LEFT_BRACKET       &sk LSHFT   &none              &to DEFAULT            &none            &none       &sk RSHFT    &kp RIGHT_BRACKET       &kp RIGHT_PARENTHESIS       &none                     &none                      &none                    &trans 
+            &trans              &none               &none                 &none                   &none                                          &kp BSPC    &DEF_LAYER_TD      &to DEFAULT            &to DEFAULT      &kp ENTER   &kp SPACE                            &none                       &none                     &none                      &none                    &trans
             >;
         };
 
@@ -133,12 +236,12 @@
 
         factory_test_layer {
             bindings = <
-            &kp N0   &kp N6   &kp N2   &kp N8   &kp N4                                                                              &kp N4   &kp N8   &kp N2   &kp N6   &kp N0
-            &kp N1   &kp N7   &kp N3   &kp N9   &kp N5   &kp N0                                                            &kp N0   &kp N5   &kp N9   &kp N3   &kp N7   &kp N1
-            &kp N2   &kp N8   &kp N4   &kp N0   &kp N6   &kp N1                                                            &kp N1   &kp N6   &kp N0   &kp N4   &kp N8   &kp N2
-            &kp N3   &kp N9   &kp N5   &kp N1   &kp N7   &kp N2                                                            &kp N2   &kp N7   &kp N1   &kp N5   &kp N9   &kp N3
-            &kp N4   &kp N0   &kp N6   &kp N2   &kp N8   &kp N3   &kp N4   &kp N5   &kp N6      &kp N6   &kp N5   &kp N4   &kp N3   &kp N8   &kp N2   &kp N6   &kp N0   &kp N4
-            &kp N5   &kp N1   &kp N7   &kp N3   &kp N9            &kp N7   &kp N8   &kp N9      &kp N9   &kp N8   &kp N7            &kp N9   &kp N3   &kp N7   &kp N1   &kp N5
+            &kp N0            &kp N6              &kp N2          &kp N8          &kp N4                                                                                                         &kp N4     &kp N8     &kp N2     &kp N6     &kp N0
+            &kp N1            &kp N7              &kp N3          &kp N9          &kp N5          &kp N0                                                                              &kp N0     &kp N5     &kp N9     &kp N3     &kp N7     &kp N1
+            &kp N2            &kp N8              &kp N4          &kp N0          &kp N6          &kp N1                                                                              &kp N1     &kp N6     &kp N0     &kp N4     &kp N8     &kp N2
+            &kp N3            &kp N9              &kp N5          &kp N1          &kp N7          &kp N2                                                                              &kp N2     &kp N7     &kp N1     &kp N5     &kp N9     &kp N3
+            &kp N4            &kp N0              &kp N6          &kp N2          &kp N8          &kp N3          &kp N4    &kp N5    &kp N6           &kp N6    &kp N5    &kp N4     &kp N3     &kp N8     &kp N2     &kp N6     &kp N0     &kp N4
+            &kp N5            &kp N1              &kp N7          &kp N3          &kp N9                          &kp N7    &kp N8    &kp N9           &kp N9    &kp N8    &kp N7                &kp N9     &kp N3     &kp N7     &kp N1     &kp N5
             >;
         };
     };
