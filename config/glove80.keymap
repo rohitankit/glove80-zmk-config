@@ -158,24 +158,28 @@
             #binding-cells = <0>;
             compatible = "zmk,behavior-tap-dance";
             bindings = <&sk LSHIFT>, <&caps_word>;
+            tapping-term-ms = <400>;
         };
 
         L_LAYER_TD: L_LAYER_TD {
             #binding-cells = <0>;
             compatible = "zmk,behavior-tap-dance"; 
             bindings = <&sl LOWER>, <&tog LOWER>; 
+            tapping-term-ms = <400>;
         };
 
         U_LAYER_TD: U_LAYER_TD {
             #binding-cells = <0>;
             compatible = "zmk,behavior-tap-dance"; 
             bindings = <&sl UPPER>, <&tog UPPER>; 
+            tapping-term-ms = <400>;
         };
 
         DEF_LAYER_TD: DEF_LAYER_TD { 
             #binding-cells = <0>;
             compatible = "zmk,behavior-tap-dance"; 
             bindings = <&to DEFAULT>, <&to DEFAULT>; 
+            tapping-term-ms = <400>;
         };
     };
 
@@ -203,23 +207,23 @@
 
         lower_layer {
             bindings = <
-            &none               &none               &none                 &none                   &none                                                                                                                                                                  &none                       &none                     &none                      &none                    &none 
-            &trans              &kp F1              &kp F2                &kp F3                  &kp F4                  &kp F5                                                                                                                 &kp F6                  &kp F7                      &kp F8                    &kp F9                     &kp F10                  &none
-            &trans              &none               &kp PLUS              &kp EQUAL               &kp MINUS               &none                                                                                                                  &none                   &kp BSLH                    &kp FSLH                  &none                      &none                    &none
-            &U_LAYER_TD         &kp LGUI            &kp LALT              &kp LCTRL               &kp SINGLE_QUOTE        &kp SEMICOLON                                                                                                          &kp TILDE               &kp COMMA                   &kp RCTRL                 &kp RALT                   &kp RGUI                 &kp ESC 
-            &trans              &none               &kp LESS_THAN         &kp GREATER_THAN        &kp LEFT_PARENTHESIS    &kp LEFT_BRACKET       &sk LSHFT   &none              &to DEFAULT            &none            &none       &sk RSHFT    &kp LEFT                &kp DOWN                    &kp UP                    &kp RIGHT                  &none                    &trans
-            &trans              &none               &none                 &none                   &none                                          &kp BSPC    &DEF_LAYER_TD      &U_LAYER_TD            &to DEFAULT      &kp ENTER   &kp SPACE                            &none                       &none                     &none                      &none                    &trans
+            &kp C_BRI_DN        &kp C_BRI_UP        &kp C_PREV            &kp C_NEXT              &kp C_PP                                                                                                                                                               &none                       &none                     &none                      &none                    &none
+            &trans              &kp DELETE          &trans                &kp UNDERSCORE          &kp PLUS                &kp PAGE_UP                                                                                                            &trans                  &trans                      &trans                    &none                      &none                    &trans
+            &trans              &none               &none                 &kp EQUAL               &kp MINUS               &kp FSLH                                                                                                               &kp BSLH                &kp NUMBER_1                &kp NUMBER_2              &kp NUMBER_3               &none                    &none
+            &DEF_LAYER_TD       &none               &none                 &kp SINGLE_QUOTE        &kp SEMICOLON           &kp COLON                                                                                                              &kp TILDE               &kp NUMBER_4                &kp NUMBER_5              &kp NUMBER_6               &kp NUMBER_0             &kp ESC
+            &trans              &kp LEFT_BRACKET    &none                 &kp LESS_THAN           &kp GREATER_THAN        &kp LEFT_PARENTHESIS   &sk LSHFT   &none              &to DEFAULT            &none            &none       &sk RSHFT    &kp RIGHT_PARENTHESIS   &kp NUMBER_7                &kp NUMBER_8              &kp NUMBER_9               &kp RIGHT_BRACKET        &trans 
+            &trans              &none               &none                 &none                   &none                                          &kp BSPC    &DEF_LAYER_TD      &to DEFAULT            &to DEFAULT      &kp ENTER   &kp SPACE                            &none                       &none                     &none                      &none                    &trans
             >;
         };
 
         upper_layer {
             bindings = <
-            &kp C_BRI_DN        &kp C_BRI_UP        &kp C_PREV            &kp C_NEXT              &kp C_PP                                                                                                                                                               &none                       &none                     &none                      &none                    &none
-            &trans              &kp DELETE          &trans                &kp UNDERSCORE          &kp PLUS                &kp PAGE_UP                                                                                                            &trans                  &trans                      &trans                    &kp BACKSLASH              &kp PIPE                 &trans
-            &trans              &kp EXCLAMATION     &kp AT_SIGN           &kp POUND               &kp DOLLAR              &kp PERCENT                                                                                                            &kp CARET               &kp AMPERSAND               &kp ASTERISK              &kp LEFT_BRACE             &kp RIGHT_BRACE          &none
-            &DEF_LAYER_TD       &kp NUMBER_1        &kp NUMBER_2          &kp NUMBER_3            &kp NUMBER_4            &kp NUMBER_5                                                                                                           &kp NUMBER_6            &kp NUMBER_7                &kp NUMBER_8              &kp NUMBER_9               &kp NUMBER_0             &kp ESC
-            &trans              &none               &kp LESS_THAN         &kp GREATER_THAN        &kp LEFT_PARENTHESIS    &kp LEFT_BRACKET       &sk LSHFT   &none              &to DEFAULT            &none            &none       &sk RSHFT    &kp RIGHT_BRACKET       &kp RIGHT_PARENTHESIS       &none                     &none                      &none                    &trans 
-            &trans              &none               &none                 &none                   &none                                          &kp BSPC    &DEF_LAYER_TD      &to DEFAULT            &to DEFAULT      &kp ENTER   &kp SPACE                            &none                       &none                     &none                      &none                    &trans
+            &none               &none               &none                 &none                   &none                                                                                                                                                                  &none                       &none                     &none                      &none                    &none
+            &trans              &none               &none                 &none                   &none                   &none                                                                                                                  &none                   &none                       &none                     &none                      &none                    &none 
+            &trans              &kp F1              &kp F2                &kp F3                  &kp F4                  &kp F5                                                                                                                 &kp F6                  &kp F7                      &kp F8                    &kp F9                     &kp F10                  &none 
+            &U_LAYER_TD         &kp LGUI            &kp LALT              &kp LCTRL               &none                   &none                                                                                                                  &kp LEFT                &kp DOWN                    &kp UP                    &kp RIGHT                  &kp RGUI                 &kp ESC 
+            &trans              &none               &none                 &none                   &none                   &none                  &sk LSHFT   &none              &to DEFAULT            &none            &none       &sk RSHFT    &none                   &none                       &none                     &none                      &none                    &trans
+            &trans              &none               &none                 &none                   &none                                          &kp BSPC    &DEF_LAYER_TD      &U_LAYER_TD            &to DEFAULT      &kp ENTER   &kp SPACE                            &none                       &none                     &none                      &none                    &trans
             >;
         };
 
