@@ -39,7 +39,7 @@
             quick-tap-ms = <200>;
             require-prior-idle-ms = <100>;
             retro-tap;
-            flavor = "hold-preferred";
+            flavor = "balanced";
             bindings = <&kp>, <&kp>;
         };
     };
