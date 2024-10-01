@@ -45,6 +45,19 @@
     };
 };
 
+/ {
+    macros {
+        tmux_window_nav: tmux_window_nav {
+            compatible = "zmk,behavior-macro-one-param";
+            #binding-cells = <1>;
+            bindings
+                    = <&macro_press &kp RCTRL &kp A>
+                    , <&macro_tap &kp>
+                    , <&macro_release &kp RCTRL &kp A>;
+        };
+    };
+};
+
 
 // HOME ROW MODS
 // CMD 
@@ -59,6 +72,12 @@
 // SHIFT
 #define L_SHFT_HM hm LSHFT F
 #define R_SHFT_HM hm RSHFT J 
+
+
+// TMUX HOTKEYS
+// MOVE TO NEXT WINDOW
+#define TMUX_NEXT_WIN tmux_window_nav SPACE
+#define TMUX_PREV_WIN tmux_window_nav BSPC
 
 
 / {
@@ -210,7 +229,7 @@
             &kp C_BRI_DN        &kp C_BRI_UP        &kp C_PREV            &kp C_NEXT              &kp C_PP                                                                                                                                                               &none                       &none                     &none                      &none                    &none
             &trans              &kp DELETE          &trans                &kp UNDERSCORE          &kp PLUS                &kp PAGE_UP                                                                                                            &trans                  &trans                      &trans                    &none                      &none                    &trans
             &trans              &none               &none                 &kp EQUAL               &kp MINUS               &kp FSLH                                                                                                               &kp BSLH                &kp NUMBER_1                &kp NUMBER_2              &kp NUMBER_3               &none                    &none
-            &DEF_LAYER_TD       &none               &none                 &kp SINGLE_QUOTE        &kp SEMICOLON           &kp COLON                                                                                                              &kp TILDE               &kp NUMBER_4                &kp NUMBER_5              &kp NUMBER_6               &kp NUMBER_0             &kp ESC
+            &DEF_LAYER_TD       &none               &none                 &kp SINGLE_QUOTE        &kp SEMICOLON           &kp COLON                                                                                                              &kp GRAVE               &kp NUMBER_4                &kp NUMBER_5              &kp NUMBER_6               &kp NUMBER_0             &kp ESC
             &trans              &kp LEFT_BRACKET    &none                 &kp LESS_THAN           &kp GREATER_THAN        &kp LEFT_PARENTHESIS   &sk LSHFT   &none              &to DEFAULT            &none            &none       &sk RSHFT    &kp RIGHT_PARENTHESIS   &kp NUMBER_7                &kp NUMBER_8              &kp NUMBER_9               &kp RIGHT_BRACKET        &trans 
             &trans              &none               &none                 &none                   &none                                          &kp BSPC    &DEF_LAYER_TD      &to DEFAULT            &to DEFAULT      &kp ENTER   &kp SPACE                            &none                       &none                     &none                      &none                    &trans
             >;
@@ -220,7 +239,7 @@
             bindings = <
             &none               &none               &none                 &none                   &none                                                                                                                                                                  &none                       &none                     &none                      &none                    &none
             &trans              &none               &none                 &none                   &none                   &none                                                                                                                  &none                   &none                       &none                     &none                      &none                    &none 
-            &trans              &kp F1              &kp F2                &kp F3                  &kp F4                  &kp F5                                                                                                                 &kp F6                  &kp F7                      &kp F8                    &kp F9                     &kp F10                  &none 
+            &trans              &kp F1              &kp F2                &kp F3                  &kp F4                  &kp F5                                                                                                                 &kp F6                  &TMUX_PREV_WIN              &TMUX_NEXT_WIN         &kp F9                     &kp F10                  &none 
             &U_LAYER_TD         &kp LGUI            &kp LALT              &kp LCTRL               &none                   &none                                                                                                                  &kp LEFT                &kp DOWN                    &kp UP                    &kp RIGHT                  &kp RGUI                 &kp ESC 
             &trans              &none               &none                 &none                   &none                   &none                  &sk LSHFT   &none              &to DEFAULT            &none            &none       &sk RSHFT    &none                   &none                       &none                     &none                      &none                    &trans
             &trans              &none               &none                 &none                   &none                                          &kp BSPC    &DEF_LAYER_TD      &U_LAYER_TD            &to DEFAULT      &kp ENTER   &kp SPACE                            &none                       &none                     &none                      &none                    &trans
